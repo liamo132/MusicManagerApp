@@ -1,1 +1,1 @@
-# MuaicManagerApplication
+# MusicManagerApp
