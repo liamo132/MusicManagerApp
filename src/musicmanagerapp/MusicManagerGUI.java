@@ -38,12 +38,14 @@ public class MusicManagerGUI extends javax.swing.JFrame {
         viewLBL = new javax.swing.JLabel();
         favBTN = new javax.swing.JButton();
         popBTN = new javax.swing.JButton();
-        rockBTN = new javax.swing.JButton();
         otherBTN = new javax.swing.JButton();
         popBTN3 = new javax.swing.JButton();
         searchSongBTN = new javax.swing.JButton();
         removeSongBTN = new javax.swing.JButton();
         rearangeSongBTN = new javax.swing.JButton();
+        playBTN = new javax.swing.JButton();
+        pauseBTN = new javax.swing.JButton();
+        exitBTN = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -68,7 +70,7 @@ public class MusicManagerGUI extends javax.swing.JFrame {
         });
 
         genreDRPDWN.setFont(new java.awt.Font("Prompt", 0, 14)); // NOI18N
-        genreDRPDWN.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pop", "Hip-Hop", "Rock", "Other" }));
+        genreDRPDWN.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pop", "Hip-Hop", "Other" }));
         genreDRPDWN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 genreDRPDWNActionPerformed(evt);
@@ -108,15 +110,6 @@ public class MusicManagerGUI extends javax.swing.JFrame {
         popBTN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 popBTNActionPerformed(evt);
-            }
-        });
-
-        rockBTN.setBackground(new java.awt.Color(255, 255, 204));
-        rockBTN.setFont(new java.awt.Font("Prompt Medium", 0, 12)); // NOI18N
-        rockBTN.setText("Rock");
-        rockBTN.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rockBTNActionPerformed(evt);
             }
         });
 
@@ -168,12 +161,25 @@ public class MusicManagerGUI extends javax.swing.JFrame {
             }
         });
 
+        playBTN.setFont(new java.awt.Font("Prompt Bold", 0, 14)); // NOI18N
+        playBTN.setText("PLAY Liked");
+        playBTN.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        pauseBTN.setFont(new java.awt.Font("Prompt Bold", 0, 14)); // NOI18N
+        pauseBTN.setText("PAUSE Liked");
+        pauseBTN.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        exitBTN.setBackground(new java.awt.Color(229, 255, 255));
+        exitBTN.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        exitBTN.setText("X");
+        exitBTN.setBorder(null);
+
         javax.swing.GroupLayout bckgrndLayout = new javax.swing.GroupLayout(bckgrnd);
         bckgrnd.setLayout(bckgrndLayout);
         bckgrndLayout.setHorizontalGroup(
             bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bckgrndLayout.createSequentialGroup()
-                .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(bckgrndLayout.createSequentialGroup()
                         .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(bckgrndLayout.createSequentialGroup()
@@ -187,39 +193,47 @@ public class MusicManagerGUI extends javax.swing.JFrame {
                                     .addComponent(genreDRPDWN, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bckgrndLayout.createSequentialGroup()
                                 .addContainerGap()
-                                .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(viewLBL)
-                                    .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(searchSongBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(addSongBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(removeSongBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(rearangeSongBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(25, 25, 25)))
+                                .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bckgrndLayout.createSequentialGroup()
+                                        .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(searchSongBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(addSongBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(removeSongBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(rearangeSongBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(25, 25, 25))
+                                    .addComponent(viewLBL, javax.swing.GroupLayout.Alignment.TRAILING))))
                         .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(bckgrndLayout.createSequentialGroup()
                                 .addGap(38, 38, 38)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(bckgrndLayout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bckgrndLayout.createSequentialGroup()
                                 .addComponent(favBTN)
-                                .addGap(18, 18, 18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(popBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(popBTN3)
-                                .addGap(18, 18, 18)
-                                .addComponent(rockBTN)
-                                .addGap(18, 18, 18)
-                                .addComponent(otherBTN))))
-                    .addGroup(bckgrndLayout.createSequentialGroup()
-                        .addGap(259, 259, 259)
-                        .addComponent(jLabel1)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(otherBTN)))
+                        .addGap(76, 76, 76))
+                    .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(pauseBTN, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(playBTN, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap(40, Short.MAX_VALUE))
+            .addGroup(bckgrndLayout.createSequentialGroup()
+                .addGap(259, 259, 259)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(exitBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         bckgrndLayout.setVerticalGroup(
             bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bckgrndLayout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(bckgrndLayout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(exitBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(bckgrndLayout.createSequentialGroup()
                         .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -244,9 +258,12 @@ public class MusicManagerGUI extends javax.swing.JFrame {
                     .addComponent(favBTN)
                     .addComponent(popBTN)
                     .addComponent(popBTN3)
-                    .addComponent(rockBTN)
                     .addComponent(otherBTN))
-                .addGap(145, 145, 145))
+                .addGap(58, 58, 58)
+                .addComponent(playBTN)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pauseBTN)
+                .addGap(35, 35, 35))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -282,10 +299,6 @@ public class MusicManagerGUI extends javax.swing.JFrame {
     private void popBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popBTNActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_popBTNActionPerformed
-
-    private void rockBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rockBTNActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_rockBTNActionPerformed
 
     private void otherBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_otherBTNActionPerformed
         // TODO add your handling code here:
@@ -346,6 +359,7 @@ public class MusicManagerGUI extends javax.swing.JFrame {
     private javax.swing.JButton addSongBTN;
     private javax.swing.JPanel bckgrnd;
     private javax.swing.JTextArea displayTA;
+    private javax.swing.JButton exitBTN;
     private javax.swing.JButton favBTN;
     private javax.swing.JComboBox<String> genreDRPDWN;
     private javax.swing.JLabel jLabel1;
@@ -353,11 +367,12 @@ public class MusicManagerGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton otherBTN;
+    private javax.swing.JButton pauseBTN;
+    private javax.swing.JButton playBTN;
     private javax.swing.JButton popBTN;
     private javax.swing.JButton popBTN3;
     private javax.swing.JButton rearangeSongBTN;
     private javax.swing.JButton removeSongBTN;
-    private javax.swing.JButton rockBTN;
     private javax.swing.JButton searchSongBTN;
     private javax.swing.JTextField titleTB;
     private javax.swing.JLabel viewLBL;
