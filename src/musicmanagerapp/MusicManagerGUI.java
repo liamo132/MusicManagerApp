@@ -8,13 +8,23 @@ package musicmanagerapp;
  *
  * @author liamf
  */
+import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.util.List;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 public class MusicManagerGUI extends javax.swing.JFrame {
+
+    private MM musicManager; //MM class to manage arraylists
+    List<Song> playlist = new ArrayList<>();
 
     /**
      * Creates new form MusicManager
      */
     public MusicManagerGUI() {
         initComponents();
+        musicManager = new MM();
     }
 
     /**
@@ -27,22 +37,22 @@ public class MusicManagerGUI extends javax.swing.JFrame {
     private void initComponents() {
 
         bckgrnd = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        title = new javax.swing.JLabel();
+        titeLBL = new javax.swing.JLabel();
+        genreLBL = new javax.swing.JLabel();
         titleTB = new javax.swing.JTextField();
         genreDRPDWN = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         displayTA = new javax.swing.JTextArea();
         addSongBTN = new javax.swing.JButton();
-        viewLBL = new javax.swing.JLabel();
-        favBTN = new javax.swing.JButton();
-        popBTN = new javax.swing.JButton();
-        otherBTN = new javax.swing.JButton();
-        popBTN3 = new javax.swing.JButton();
         searchSongBTN = new javax.swing.JButton();
         removeSongBTN = new javax.swing.JButton();
         rearangeSongBTN = new javax.swing.JButton();
+        viewLBL = new javax.swing.JLabel();
+        likedBTN = new javax.swing.JButton();
+        popBTN = new javax.swing.JButton();
+        HipHiopBTN = new javax.swing.JButton();
+        otherBTN = new javax.swing.JButton();
         playBTN = new javax.swing.JButton();
         pauseBTN = new javax.swing.JButton();
         exitBTN = new javax.swing.JButton();
@@ -52,16 +62,16 @@ public class MusicManagerGUI extends javax.swing.JFrame {
         bckgrnd.setBackground(new java.awt.Color(229, 255, 255));
         bckgrnd.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jLabel1.setBackground(new java.awt.Color(204, 204, 255));
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setText("The Music Manager");
-        jLabel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        title.setBackground(new java.awt.Color(204, 204, 255));
+        title.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        title.setText("The Music Manager");
+        title.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jLabel2.setFont(new java.awt.Font("Prompt", 1, 14)); // NOI18N
-        jLabel2.setText("Song title:");
+        titeLBL.setFont(new java.awt.Font("Prompt", 1, 14)); // NOI18N
+        titeLBL.setText("Song title:");
 
-        jLabel3.setFont(new java.awt.Font("Prompt", 1, 14)); // NOI18N
-        jLabel3.setText("Song genre:");
+        genreLBL.setFont(new java.awt.Font("Prompt", 1, 14)); // NOI18N
+        genreLBL.setText("Song genre:");
 
         titleTB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -88,46 +98,6 @@ public class MusicManagerGUI extends javax.swing.JFrame {
         addSongBTN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addSongBTNActionPerformed(evt);
-            }
-        });
-
-        viewLBL.setFont(new java.awt.Font("Prompt Semibold", 0, 12)); // NOI18N
-        viewLBL.setForeground(new java.awt.Color(153, 153, 153));
-        viewLBL.setText("View:");
-
-        favBTN.setBackground(new java.awt.Color(255, 255, 204));
-        favBTN.setFont(new java.awt.Font("Prompt Medium", 0, 12)); // NOI18N
-        favBTN.setText("Liked");
-        favBTN.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                favBTNActionPerformed(evt);
-            }
-        });
-
-        popBTN.setBackground(new java.awt.Color(255, 255, 204));
-        popBTN.setFont(new java.awt.Font("Prompt Medium", 0, 12)); // NOI18N
-        popBTN.setText("Pop");
-        popBTN.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                popBTNActionPerformed(evt);
-            }
-        });
-
-        otherBTN.setBackground(new java.awt.Color(255, 255, 204));
-        otherBTN.setFont(new java.awt.Font("Prompt Medium", 0, 12)); // NOI18N
-        otherBTN.setText("Other");
-        otherBTN.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                otherBTNActionPerformed(evt);
-            }
-        });
-
-        popBTN3.setBackground(new java.awt.Color(255, 255, 204));
-        popBTN3.setFont(new java.awt.Font("Prompt Medium", 0, 12)); // NOI18N
-        popBTN3.setText("Hip-Hop");
-        popBTN3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                popBTN3ActionPerformed(evt);
             }
         });
 
@@ -161,6 +131,46 @@ public class MusicManagerGUI extends javax.swing.JFrame {
             }
         });
 
+        viewLBL.setFont(new java.awt.Font("Prompt Semibold", 0, 12)); // NOI18N
+        viewLBL.setForeground(new java.awt.Color(153, 153, 153));
+        viewLBL.setText("View:");
+
+        likedBTN.setBackground(new java.awt.Color(255, 255, 204));
+        likedBTN.setFont(new java.awt.Font("Prompt Medium", 0, 12)); // NOI18N
+        likedBTN.setText("Liked");
+        likedBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                likedBTNActionPerformed(evt);
+            }
+        });
+
+        popBTN.setBackground(new java.awt.Color(255, 255, 204));
+        popBTN.setFont(new java.awt.Font("Prompt Medium", 0, 12)); // NOI18N
+        popBTN.setText("Pop");
+        popBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popBTNActionPerformed(evt);
+            }
+        });
+
+        HipHiopBTN.setBackground(new java.awt.Color(255, 255, 204));
+        HipHiopBTN.setFont(new java.awt.Font("Prompt Medium", 0, 12)); // NOI18N
+        HipHiopBTN.setText("Hip-Hop");
+        HipHiopBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                HipHiopBTNActionPerformed(evt);
+            }
+        });
+
+        otherBTN.setBackground(new java.awt.Color(255, 255, 204));
+        otherBTN.setFont(new java.awt.Font("Prompt Medium", 0, 12)); // NOI18N
+        otherBTN.setText("Other");
+        otherBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                otherBTNActionPerformed(evt);
+            }
+        });
+
         playBTN.setFont(new java.awt.Font("Prompt Bold", 0, 14)); // NOI18N
         playBTN.setText("PLAY Liked");
         playBTN.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -185,8 +195,8 @@ public class MusicManagerGUI extends javax.swing.JFrame {
                             .addGroup(bckgrndLayout.createSequentialGroup()
                                 .addGap(33, 33, 33)
                                 .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(genreLBL)
+                                    .addComponent(titeLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(titleTB, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -207,11 +217,11 @@ public class MusicManagerGUI extends javax.swing.JFrame {
                                 .addGap(38, 38, 38)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bckgrndLayout.createSequentialGroup()
-                                .addComponent(favBTN)
+                                .addComponent(likedBTN)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(popBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(popBTN3)
+                                .addComponent(HipHiopBTN)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(otherBTN)))
                         .addGap(76, 76, 76))
@@ -221,7 +231,7 @@ public class MusicManagerGUI extends javax.swing.JFrame {
                 .addContainerGap(40, Short.MAX_VALUE))
             .addGroup(bckgrndLayout.createSequentialGroup()
                 .addGap(259, 259, 259)
-                .addComponent(jLabel1)
+                .addComponent(title)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(exitBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -231,17 +241,17 @@ public class MusicManagerGUI extends javax.swing.JFrame {
                 .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(bckgrndLayout.createSequentialGroup()
                         .addGap(17, 17, 17)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(exitBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(bckgrndLayout.createSequentialGroup()
                         .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(titleTB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(titeLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(genreLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(genreDRPDWN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(addSongBTN)
@@ -255,9 +265,9 @@ public class MusicManagerGUI extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(viewLBL)
-                    .addComponent(favBTN)
+                    .addComponent(likedBTN)
                     .addComponent(popBTN)
-                    .addComponent(popBTN3)
+                    .addComponent(HipHiopBTN)
                     .addComponent(otherBTN))
                 .addGap(58, 58, 58)
                 .addComponent(playBTN)
@@ -290,11 +300,23 @@ public class MusicManagerGUI extends javax.swing.JFrame {
 
     private void addSongBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSongBTNActionPerformed
         // TODO add your handling code here:
+        // get inputs from GUI
+        String title = titleTB.getText();
+        String genre = genreDRPDWN.getSelectedItem().toString();
+
+        // ceate a new Song 
+        Song newSong = new Song(title, genre);
+
+        // Add the song to the playlist ArrayList
+        playlist.add(newSong);
+
+        // add the song to the liked songs playlist
+        musicManager.addLikedSong(newSong, genre, displayTA);
     }//GEN-LAST:event_addSongBTNActionPerformed
 
-    private void favBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_favBTNActionPerformed
+    private void likedBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_likedBTNActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_favBTNActionPerformed
+    }//GEN-LAST:event_likedBTNActionPerformed
 
     private void popBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popBTNActionPerformed
         // TODO add your handling code here:
@@ -304,9 +326,9 @@ public class MusicManagerGUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_otherBTNActionPerformed
 
-    private void popBTN3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popBTN3ActionPerformed
+    private void HipHiopBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HipHiopBTNActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_popBTN3ActionPerformed
+    }//GEN-LAST:event_HipHiopBTNActionPerformed
 
     private void searchSongBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchSongBTNActionPerformed
         // TODO add your handling code here:
@@ -317,7 +339,69 @@ public class MusicManagerGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_removeSongBTNActionPerformed
 
     private void rearangeSongBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rearangeSongBTNActionPerformed
-        // TODO add your handling code here:
+
+        //check if the size of the liked songs is zero
+        if (playlist.isEmpty()) {
+            displayTA.setText("No songs to rearrange."); //message if there are no songs to rearrange
+            return; // Exit the method
+        }
+
+        //create a priority queue to rearrange
+        PriorityQueue<Song> priorityQueue = new PriorityQueue<>(Comparator.comparing(Song::getTitle));
+
+        // enqueue songs with their titles and genres
+        priorityQueue.addAll(playlist);
+
+        // Dequeue and display songs in the desired order
+        StringBuilder rearrangedSongs = new StringBuilder();
+        while (!priorityQueue.isEmpty()) {
+            Song song = priorityQueue.poll();
+            rearrangedSongs.append(song.getTitle()).append(" - ").append(song.getGenre()).append("\n");
+        }
+
+        displayTA.setText(rearrangedSongs.toString());
+
+        // joption for user input (song name to swap with position)
+        String songName = JOptionPane.showInputDialog(this, "Enter the name of the song you want to move:");
+        if (songName != null && !songName.isEmpty()) {
+            // find the index of the song in the liked playlist
+            int index = -1;
+            for (int i = 0; i < playlist.size(); i++) {
+                if (playlist.get(i).getTitle().equalsIgnoreCase(songName)) {
+                    index = i;
+                    break;
+                }
+            }
+            if (index == -1) {
+                JOptionPane.showMessageDialog(this, "Song not found.");
+                return;
+            }
+
+            String positionStr = JOptionPane.showInputDialog(this, "Enter the new Song position :");
+            if (positionStr != null && !positionStr.isEmpty()) {
+                try {
+                    int position = Integer.parseInt(positionStr) - 1; // - 1 to convert to 0 index
+                    if (position < 0 || position >= playlist.size()) {
+                        JOptionPane.showMessageDialog(this, "Invalid position. Please enter a valid number.");
+                        return;
+                    }
+                    // move the song to the new spot
+                    Song movedSong = playlist.remove(index);
+                    playlist.add(position, movedSong);
+
+                    // update display
+                    rearrangedSongs.setLength(0);
+                    for (Song song : playlist) {
+                        rearrangedSongs.append(song.getTitle()).append(" - ").append(song.getGenre()).append("\n");
+                    }
+                    displayTA.setText(rearrangedSongs.toString());
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "Invalid position. Please enter a valid number.");
+                }
+            }
+        }
+
+
     }//GEN-LAST:event_rearangeSongBTNActionPerformed
 
     /**
@@ -334,16 +418,24 @@ public class MusicManagerGUI extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MusicManagerGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MusicManagerGUI.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MusicManagerGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MusicManagerGUI.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MusicManagerGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MusicManagerGUI.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MusicManagerGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MusicManagerGUI.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -356,24 +448,24 @@ public class MusicManagerGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton HipHiopBTN;
     private javax.swing.JButton addSongBTN;
     private javax.swing.JPanel bckgrnd;
     private javax.swing.JTextArea displayTA;
     private javax.swing.JButton exitBTN;
-    private javax.swing.JButton favBTN;
     private javax.swing.JComboBox<String> genreDRPDWN;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel genreLBL;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton likedBTN;
     private javax.swing.JButton otherBTN;
     private javax.swing.JButton pauseBTN;
     private javax.swing.JButton playBTN;
     private javax.swing.JButton popBTN;
-    private javax.swing.JButton popBTN3;
     private javax.swing.JButton rearangeSongBTN;
     private javax.swing.JButton removeSongBTN;
     private javax.swing.JButton searchSongBTN;
+    private javax.swing.JLabel titeLBL;
+    private javax.swing.JLabel title;
     private javax.swing.JTextField titleTB;
     private javax.swing.JLabel viewLBL;
     // End of variables declaration//GEN-END:variables
