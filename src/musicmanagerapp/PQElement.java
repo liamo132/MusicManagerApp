@@ -35,6 +35,6 @@ public class PQElement {
     }
 
     public String printSong() {
-        return "Title: " + song.getTitle() + ", Genre: " + song.getGenre();
+        return " Title: " + song.getTitle() + ", Genre: " + song.getGenre();
     }
 }

@@ -10,6 +10,7 @@ package musicmanagerapp;
  */
 import java.util.Comparator;
 import java.util.PriorityQueue;
+import java.util.Stack;
 import java.util.List;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -18,6 +19,7 @@ public class MusicManagerGUI extends javax.swing.JFrame {
 
     private MM musicManager; //MM class to manage arraylists
     List<Song> playlist = new ArrayList<>();
+    private Stack<Song> lastAddedStack;
 
     /**
      * Creates new form MusicManager
@@ -25,6 +27,7 @@ public class MusicManagerGUI extends javax.swing.JFrame {
     public MusicManagerGUI() {
         initComponents();
         musicManager = new MM();
+        lastAddedStack = new Stack<>();
     }
 
     /**
@@ -43,19 +46,28 @@ public class MusicManagerGUI extends javax.swing.JFrame {
         titleTB = new javax.swing.JTextField();
         genreDRPDWN = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
-        displayTA = new javax.swing.JTextArea();
+        displayHipHopTA = new javax.swing.JTextArea();
         addSongBTN = new javax.swing.JButton();
         searchSongBTN = new javax.swing.JButton();
         removeSongBTN = new javax.swing.JButton();
         rearangeSongBTN = new javax.swing.JButton();
         viewLBL = new javax.swing.JLabel();
-        likedBTN = new javax.swing.JButton();
-        popBTN = new javax.swing.JButton();
-        HipHiopBTN = new javax.swing.JButton();
-        otherBTN = new javax.swing.JButton();
+        viewLikedBTN = new javax.swing.JButton();
+        addPopBTN = new javax.swing.JButton();
+        AddHipHiopBTN = new javax.swing.JButton();
         playBTN = new javax.swing.JButton();
         pauseBTN = new javax.swing.JButton();
         exitBTN = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        displayLikedTA = new javax.swing.JTextArea();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        displayPopTA = new javax.swing.JTextArea();
+        popLBL = new javax.swing.JLabel();
+        HipHopLBL = new javax.swing.JLabel();
+        addLBL = new javax.swing.JLabel();
+        popLBL1 = new javax.swing.JLabel();
+        viewPopBTN = new javax.swing.JButton();
+        viewHipHopBTN = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -87,9 +99,9 @@ public class MusicManagerGUI extends javax.swing.JFrame {
             }
         });
 
-        displayTA.setColumns(20);
-        displayTA.setRows(5);
-        jScrollPane1.setViewportView(displayTA);
+        displayHipHopTA.setColumns(20);
+        displayHipHopTA.setRows(5);
+        jScrollPane1.setViewportView(displayHipHopTA);
 
         addSongBTN.setBackground(new java.awt.Color(153, 255, 153));
         addSongBTN.setFont(new java.awt.Font("Prompt Bold", 0, 12)); // NOI18N
@@ -135,39 +147,30 @@ public class MusicManagerGUI extends javax.swing.JFrame {
         viewLBL.setForeground(new java.awt.Color(153, 153, 153));
         viewLBL.setText("View:");
 
-        likedBTN.setBackground(new java.awt.Color(255, 255, 204));
-        likedBTN.setFont(new java.awt.Font("Prompt Medium", 0, 12)); // NOI18N
-        likedBTN.setText("Liked");
-        likedBTN.addActionListener(new java.awt.event.ActionListener() {
+        viewLikedBTN.setBackground(new java.awt.Color(0, 204, 204));
+        viewLikedBTN.setFont(new java.awt.Font("Prompt Medium", 0, 12)); // NOI18N
+        viewLikedBTN.setText("Liked Playlist");
+        viewLikedBTN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                likedBTNActionPerformed(evt);
+                viewLikedBTNActionPerformed(evt);
             }
         });
 
-        popBTN.setBackground(new java.awt.Color(255, 255, 204));
-        popBTN.setFont(new java.awt.Font("Prompt Medium", 0, 12)); // NOI18N
-        popBTN.setText("Pop");
-        popBTN.addActionListener(new java.awt.event.ActionListener() {
+        addPopBTN.setBackground(new java.awt.Color(255, 255, 204));
+        addPopBTN.setFont(new java.awt.Font("Prompt Medium", 0, 12)); // NOI18N
+        addPopBTN.setText("Pop");
+        addPopBTN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                popBTNActionPerformed(evt);
+                addPopBTNActionPerformed(evt);
             }
         });
 
-        HipHiopBTN.setBackground(new java.awt.Color(255, 255, 204));
-        HipHiopBTN.setFont(new java.awt.Font("Prompt Medium", 0, 12)); // NOI18N
-        HipHiopBTN.setText("Hip-Hop");
-        HipHiopBTN.addActionListener(new java.awt.event.ActionListener() {
+        AddHipHiopBTN.setBackground(new java.awt.Color(255, 255, 204));
+        AddHipHiopBTN.setFont(new java.awt.Font("Prompt Medium", 0, 12)); // NOI18N
+        AddHipHiopBTN.setText("Hip-Hop");
+        AddHipHiopBTN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                HipHiopBTNActionPerformed(evt);
-            }
-        });
-
-        otherBTN.setBackground(new java.awt.Color(255, 255, 204));
-        otherBTN.setFont(new java.awt.Font("Prompt Medium", 0, 12)); // NOI18N
-        otherBTN.setText("Other");
-        otherBTN.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                otherBTNActionPerformed(evt);
+                AddHipHiopBTNActionPerformed(evt);
             }
         });
 
@@ -183,69 +186,127 @@ public class MusicManagerGUI extends javax.swing.JFrame {
         exitBTN.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         exitBTN.setText("X");
         exitBTN.setBorder(null);
+        exitBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitBTNActionPerformed(evt);
+            }
+        });
+
+        displayLikedTA.setColumns(20);
+        displayLikedTA.setRows(5);
+        jScrollPane2.setViewportView(displayLikedTA);
+
+        displayPopTA.setColumns(20);
+        displayPopTA.setRows(5);
+        jScrollPane3.setViewportView(displayPopTA);
+
+        popLBL.setFont(new java.awt.Font("Prompt Semibold", 0, 12)); // NOI18N
+        popLBL.setForeground(new java.awt.Color(153, 153, 153));
+        popLBL.setText("pop:");
+
+        HipHopLBL.setFont(new java.awt.Font("Prompt Semibold", 0, 12)); // NOI18N
+        HipHopLBL.setForeground(new java.awt.Color(153, 153, 153));
+        HipHopLBL.setText("hip-hop:");
+
+        addLBL.setFont(new java.awt.Font("Prompt Semibold", 0, 12)); // NOI18N
+        addLBL.setForeground(new java.awt.Color(51, 51, 51));
+        addLBL.setText("Add last song to:");
+
+        popLBL1.setFont(new java.awt.Font("Prompt Semibold", 0, 12)); // NOI18N
+        popLBL1.setForeground(new java.awt.Color(153, 153, 153));
+        popLBL1.setText("or");
+
+        viewPopBTN.setBackground(new java.awt.Color(0, 204, 204));
+        viewPopBTN.setFont(new java.awt.Font("Prompt Medium", 0, 12)); // NOI18N
+        viewPopBTN.setText("Pop Playlist");
+        viewPopBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewPopBTNActionPerformed(evt);
+            }
+        });
+
+        viewHipHopBTN.setBackground(new java.awt.Color(0, 204, 204));
+        viewHipHopBTN.setFont(new java.awt.Font("Prompt Medium", 0, 12)); // NOI18N
+        viewHipHopBTN.setText("Hip-Hop Playlist");
+        viewHipHopBTN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewHipHopBTNActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout bckgrndLayout = new javax.swing.GroupLayout(bckgrnd);
         bckgrnd.setLayout(bckgrndLayout);
         bckgrndLayout.setHorizontalGroup(
             bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bckgrndLayout.createSequentialGroup()
-                .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(exitBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(bckgrndLayout.createSequentialGroup()
+                .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(bckgrndLayout.createSequentialGroup()
+                        .addGap(33, 33, 33)
                         .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(bckgrndLayout.createSequentialGroup()
-                                .addGap(33, 33, 33)
+                            .addComponent(genreLBL)
+                            .addComponent(titeLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, bckgrndLayout.createSequentialGroup()
+                                .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(bckgrndLayout.createSequentialGroup()
+                                        .addComponent(playBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(104, 104, 104)
+                                        .addComponent(viewLBL)
+                                        .addGap(9, 9, 9))
+                                    .addComponent(addLBL))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(genreLBL)
-                                    .addComponent(titeLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
+                                    .addGroup(bckgrndLayout.createSequentialGroup()
+                                        .addComponent(addPopBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(popLBL1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(AddHipHiopBTN))
+                                    .addComponent(viewLikedBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(title)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, bckgrndLayout.createSequentialGroup()
                                 .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(titleTB, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(genreDRPDWN, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bckgrndLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bckgrndLayout.createSequentialGroup()
+                                    .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(titleTB)
+                                        .addComponent(genreDRPDWN, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(pauseBTN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(bckgrndLayout.createSequentialGroup()
+                                        .addGap(19, 19, 19)
                                         .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(searchSongBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(addSongBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(removeSongBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(rearangeSongBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(25, 25, 25))
-                                    .addComponent(viewLBL, javax.swing.GroupLayout.Alignment.TRAILING))))
+                                            .addComponent(rearangeSongBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(150, 150, 150)
+                                .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(viewHipHopBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(viewPopBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(bckgrndLayout.createSequentialGroup()
+                        .addGap(698, 698, 698)
                         .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(bckgrndLayout.createSequentialGroup()
-                                .addGap(38, 38, 38)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bckgrndLayout.createSequentialGroup()
-                                .addComponent(likedBTN)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(popBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(HipHiopBTN)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(otherBTN)))
-                        .addGap(76, 76, 76))
-                    .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(pauseBTN, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(playBTN, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(40, Short.MAX_VALUE))
-            .addGroup(bckgrndLayout.createSequentialGroup()
-                .addGap(259, 259, 259)
-                .addComponent(title)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(exitBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(HipHopLBL)
+                            .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(popLBL)
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1)))))
+                .addContainerGap(49, Short.MAX_VALUE))
+            .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(bckgrndLayout.createSequentialGroup()
+                    .addGap(282, 282, 282)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(511, Short.MAX_VALUE)))
         );
         bckgrndLayout.setVerticalGroup(
             bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bckgrndLayout.createSequentialGroup()
                 .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(bckgrndLayout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(exitBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-                .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(bckgrndLayout.createSequentialGroup()
+                        .addComponent(exitBTN, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(titleTB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(titeLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -253,27 +314,55 @@ public class MusicManagerGUI extends javax.swing.JFrame {
                         .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(genreLBL, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(genreDRPDWN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addGap(26, 26, 26)
                         .addComponent(addSongBTN)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(searchSongBTN)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(removeSongBTN)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(rearangeSongBTN))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
+                        .addComponent(rearangeSongBTN)
+                        .addGap(26, 26, 26))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, bckgrndLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(334, 334, 334)))
                 .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(viewLBL)
-                    .addComponent(likedBTN)
-                    .addComponent(popBTN)
-                    .addComponent(HipHiopBTN)
-                    .addComponent(otherBTN))
-                .addGap(58, 58, 58)
-                .addComponent(playBTN)
+                    .addComponent(addPopBTN)
+                    .addComponent(AddHipHiopBTN)
+                    .addComponent(addLBL)
+                    .addComponent(popLBL1))
+                .addGap(25, 25, 25)
+                .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(bckgrndLayout.createSequentialGroup()
+                        .addComponent(playBTN)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(pauseBTN)
+                        .addGap(53, 53, 53))
+                    .addGroup(bckgrndLayout.createSequentialGroup()
+                        .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(viewLikedBTN)
+                            .addComponent(viewLBL))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(viewPopBTN)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(viewHipHopBTN)
+                        .addGap(13, 13, 13))))
+            .addGroup(bckgrndLayout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addComponent(popLBL)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pauseBTN)
-                .addGap(35, 35, 35))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addComponent(HipHopLBL)
+                .addGap(5, 5, 5)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13))
+            .addGroup(bckgrndLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(bckgrndLayout.createSequentialGroup()
+                    .addGap(123, 123, 123)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(193, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -290,59 +379,48 @@ public class MusicManagerGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void titleTBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_titleTBActionPerformed
+    private void viewHipHopBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewHipHopBTNActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_titleTBActionPerformed
+    }//GEN-LAST:event_viewHipHopBTNActionPerformed
 
-    private void genreDRPDWNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genreDRPDWNActionPerformed
+    private void viewPopBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewPopBTNActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_genreDRPDWNActionPerformed
+    }//GEN-LAST:event_viewPopBTNActionPerformed
 
-    private void addSongBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSongBTNActionPerformed
+    private void AddHipHiopBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddHipHiopBTNActionPerformed
         // TODO add your handling code here:
-        // get inputs from GUI
-        String title = titleTB.getText();
-        String genre = genreDRPDWN.getSelectedItem().toString();
+        if (!lastAddedStack.isEmpty()) {
+            // Pop the last added song from the stack
+            Song lastAddedSong = lastAddedStack.pop();
+            // Add the last added song to the Hip-Hop genre playlist
+            musicManager.addHipHopSong(lastAddedSong);
+            // Update display
+            displayHipHopTA.append("\n  " +lastAddedSong.getTitle() + " - " + lastAddedSong.getGenre() + "\n");
+        }
+    }//GEN-LAST:event_AddHipHiopBTNActionPerformed
 
-        // ceate a new Song 
-        Song newSong = new Song(title, genre);
-
-        // Add the song to the playlist ArrayList
-        playlist.add(newSong);
-
-        // add the song to the liked songs playlist
-        musicManager.addLikedSong(newSong, genre, displayTA);
-    }//GEN-LAST:event_addSongBTNActionPerformed
-
-    private void likedBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_likedBTNActionPerformed
+    private void addPopBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPopBTNActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_likedBTNActionPerformed
+        if (!lastAddedStack.isEmpty()) {
+            // Pop the last added song from the stack
+            Song lastAddedSong = lastAddedStack.pop();
+            // Add the last added song to the Pop genre playlist
+            musicManager.addPopSong(lastAddedSong);
+            // Update display
+            displayPopTA.append("\n  " +lastAddedSong.getTitle() + " - " + lastAddedSong.getGenre() + "\n");
+        }
 
-    private void popBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popBTNActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_popBTNActionPerformed
+    }//GEN-LAST:event_addPopBTNActionPerformed
 
-    private void otherBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_otherBTNActionPerformed
+    private void viewLikedBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewLikedBTNActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_otherBTNActionPerformed
-
-    private void HipHiopBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_HipHiopBTNActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_HipHiopBTNActionPerformed
-
-    private void searchSongBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchSongBTNActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_searchSongBTNActionPerformed
-
-    private void removeSongBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeSongBTNActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_removeSongBTNActionPerformed
+    }//GEN-LAST:event_viewLikedBTNActionPerformed
 
     private void rearangeSongBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rearangeSongBTNActionPerformed
 
         //check if the size of the liked songs is zero
         if (playlist.isEmpty()) {
-            displayTA.setText("No songs to rearrange."); //message if there are no songs to rearrange
+            displayLikedTA.setText("No songs to rearrange."); //message if there are no songs to rearrange
             return; // Exit the method
         }
 
@@ -356,10 +434,10 @@ public class MusicManagerGUI extends javax.swing.JFrame {
         StringBuilder rearrangedSongs = new StringBuilder();
         while (!priorityQueue.isEmpty()) {
             Song song = priorityQueue.poll();
-            rearrangedSongs.append(song.getTitle()).append(" - ").append(song.getGenre()).append("\n");
+            rearrangedSongs.append("  " + song.getTitle()).append(" - ").append(song.getGenre()).append("\n");
         }
 
-        displayTA.setText(rearrangedSongs.toString());
+        displayLikedTA.setText(rearrangedSongs.toString());
 
         // joption for user input (song name to swap with position)
         String songName = JOptionPane.showInputDialog(this, "Enter the name of the song you want to move:");
@@ -382,7 +460,7 @@ public class MusicManagerGUI extends javax.swing.JFrame {
                 try {
                     int position = Integer.parseInt(positionStr) - 1; // - 1 to convert to 0 index
                     if (position < 0 || position >= playlist.size()) {
-                        JOptionPane.showMessageDialog(this, "Invalid position. Please enter a valid number.");
+                        JOptionPane.showMessageDialog(this, "Invalid position.");
                         return;
                     }
                     // move the song to the new spot
@@ -394,15 +472,117 @@ public class MusicManagerGUI extends javax.swing.JFrame {
                     for (Song song : playlist) {
                         rearrangedSongs.append(song.getTitle()).append(" - ").append(song.getGenre()).append("\n");
                     }
-                    displayTA.setText(rearrangedSongs.toString());
+                    displayLikedTA.setText(rearrangedSongs.toString());
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(this, "Invalid position. Please enter a valid number.");
                 }
             }
         }
 
-
     }//GEN-LAST:event_rearangeSongBTNActionPerformed
+
+    private void removeSongBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeSongBTNActionPerformed
+        // TODO add your handling code here:
+        // check if the liked playlist is empty
+    if (playlist.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "No songs to remove.");
+    return; 
+    }
+
+    String songName = JOptionPane.showInputDialog(this, "What is the song you want removed?:");
+
+    if (songName != null && !songName.isEmpty()) {
+        boolean songRemoved = false;
+
+        // find the song
+        for (int i = 0; i < playlist.size(); i++) {
+            Song song = playlist.get(i);
+            if (song.getTitle().equalsIgnoreCase(songName)) {
+                playlist.remove(i); // Remove the song at index i
+                songRemoved = true;
+                break; 
+            }
+        }
+
+        // update the display 
+        if (songRemoved) {
+            StringBuilder likedSongsDisplay = new StringBuilder();
+            for (Song song : playlist) {
+                likedSongsDisplay.append(song.getTitle()).append(" - ").append(song.getGenre()).append("\n");
+            }
+            displayLikedTA.setText(likedSongsDisplay.toString());
+        } else {
+            JOptionPane.showMessageDialog(this, "Song '" + songName + "' not found in the liked playlist.");
+        }
+    }
+    }//GEN-LAST:event_removeSongBTNActionPerformed
+
+    private void searchSongBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchSongBTNActionPerformed
+        // TODO add your handling code here:
+
+        // Check if the liked playlist is empty
+        if (playlist.isEmpty()) {
+            displayLikedTA.setText(" playlist is empty...");
+            return; // Exit the method if playlist is empty
+        }
+
+        String songName = JOptionPane.showInputDialog(this, "Enter the name of the song you want to search:");
+
+        if (songName != null && !songName.isEmpty()) {
+            boolean songFound = false;
+            String genre = "";
+            int position = -1;
+            for (int i = 0; i < playlist.size(); i++) {
+                Song song = playlist.get(i);
+                if (song.getTitle().equalsIgnoreCase(songName)) {
+                    songFound = true;
+                    genre = song.getGenre();
+                    position = i + 1; // + 1 to convert to 0 index
+                    break;
+                }
+            }
+
+            //display result
+            if (songFound) {
+                String message = " You searched for '" + songName + "'. It is in the " + genre + " genre, and is in the no. " + position + " position of your liked playlist.";
+                displayLikedTA.setText(message);
+            } else {
+                JOptionPane.showMessageDialog(this, "Song not found.");
+            }
+        }
+    }//GEN-LAST:event_searchSongBTNActionPerformed
+
+    private void addSongBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSongBTNActionPerformed
+        // TODO add your handling code here:
+        // get inputs from GUI
+        String title = titleTB.getText();
+        String genre = genreDRPDWN.getSelectedItem().toString();
+
+        // ceate a new Song
+        Song newSong = new Song(title, genre);
+
+        // Add the song to the playlist ArrayList
+        playlist.add(newSong);
+
+        // add the song to the liked songs playlist
+        musicManager.addLikedSong(newSong, genre, displayLikedTA);
+
+        // push the last added song onto the stack, the last song added will be popped into either hip hop or pop,(or neither)
+        lastAddedStack.push(newSong);
+    }//GEN-LAST:event_addSongBTNActionPerformed
+
+    private void genreDRPDWNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genreDRPDWNActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_genreDRPDWNActionPerformed
+
+    private void titleTBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_titleTBActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_titleTBActionPerformed
+
+    private void exitBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitBTNActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_exitBTNActionPerformed
 
     /**
      * @param args the command line arguments
@@ -448,25 +628,34 @@ public class MusicManagerGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton HipHiopBTN;
+    private javax.swing.JButton AddHipHiopBTN;
+    private javax.swing.JLabel HipHopLBL;
+    private javax.swing.JLabel addLBL;
+    private javax.swing.JButton addPopBTN;
     private javax.swing.JButton addSongBTN;
     private javax.swing.JPanel bckgrnd;
-    private javax.swing.JTextArea displayTA;
+    private javax.swing.JTextArea displayHipHopTA;
+    private javax.swing.JTextArea displayLikedTA;
+    private javax.swing.JTextArea displayPopTA;
     private javax.swing.JButton exitBTN;
     private javax.swing.JComboBox<String> genreDRPDWN;
     private javax.swing.JLabel genreLBL;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton likedBTN;
-    private javax.swing.JButton otherBTN;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JButton pauseBTN;
     private javax.swing.JButton playBTN;
-    private javax.swing.JButton popBTN;
+    private javax.swing.JLabel popLBL;
+    private javax.swing.JLabel popLBL1;
     private javax.swing.JButton rearangeSongBTN;
     private javax.swing.JButton removeSongBTN;
     private javax.swing.JButton searchSongBTN;
     private javax.swing.JLabel titeLBL;
     private javax.swing.JLabel title;
     private javax.swing.JTextField titleTB;
+    private javax.swing.JButton viewHipHopBTN;
     private javax.swing.JLabel viewLBL;
+    private javax.swing.JButton viewLikedBTN;
+    private javax.swing.JButton viewPopBTN;
     // End of variables declaration//GEN-END:variables
 }
