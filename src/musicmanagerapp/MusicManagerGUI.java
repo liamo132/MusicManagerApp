@@ -33,6 +33,11 @@ public class MusicManagerGUI extends javax.swing.JFrame {
         lastAddedStack = new Stack<>();
     }
 
+    private void playLikedPlaylist() {
+        displayLikedTA.setText(""); // clear the display
+        playBTNActionPerformed(null);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -95,7 +100,7 @@ public class MusicManagerGUI extends javax.swing.JFrame {
         });
 
         genreDRPDWN.setFont(new java.awt.Font("Prompt", 0, 14)); // NOI18N
-        genreDRPDWN.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pop", "Hip-Hop", "Other" }));
+        genreDRPDWN.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pop", "Hip-Hop" }));
         genreDRPDWN.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 genreDRPDWNActionPerformed(evt);
@@ -397,7 +402,7 @@ public class MusicManagerGUI extends javax.swing.JFrame {
         List<Song> hipHopPlaylist = musicManager.getHipHopPlaylist();
         if (hipHopPlaylist.isEmpty()) {
             displayHipHopTA.setText("Hip-Hop playlist is empty.");
-            return; // Exit the method if playlist is empty
+            return;
         }
 
         // Construct the string representation of the Hip-Hop playlist
@@ -409,11 +414,10 @@ public class MusicManagerGUI extends javax.swing.JFrame {
         // Iterate over the Hip-Hop playlist and append each song's information to the display string
         for (int i = 0; i < hipHopPlaylist.size(); i++) {
             Song song = hipHopPlaylist.get(i);
-            // Append the position, song name, and genre to the display string
             hipHopPlaylistDisplay.append(i + 1).append(". ").append(song.getTitle()).append(", ").append(song.getGenre()).append("\n");
         }
 
-        // Display the Hip-Hop playlist in the corresponding text area
+        // display the Hip-Hop playlist in the corresponding text area
         displayHipHopTA.setText(hipHopPlaylistDisplay.toString());
     }//GEN-LAST:event_viewHipHopBTNActionPerformed
 
@@ -445,51 +449,48 @@ public class MusicManagerGUI extends javax.swing.JFrame {
     private void AddHipHiopBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddHipHiopBTNActionPerformed
         // TODO add your handling code here:
         if (!lastAddedStack.isEmpty()) {
-            // Pop the last added song from the stack
+            // get the last added song from the stack
             Song lastAddedSong = lastAddedStack.pop();
-            // Add the last added song to the Hip-Hop genre playlist
-            musicManager.addHipHopSong(lastAddedSong);
-            // Update display
-            displayHipHopTA.append("\n  " + lastAddedSong.getTitle() + " - " + lastAddedSong.getGenre() + "\n");
+
+            // add the last added song to hiphop
+            musicManager.addHipHopSong(lastAddedSong, displayHipHopTA);
         }
     }//GEN-LAST:event_AddHipHiopBTNActionPerformed
 
     private void addPopBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPopBTNActionPerformed
         // TODO add your handling code here:
         if (!lastAddedStack.isEmpty()) {
-            // Pop the last added song from the stack
             Song lastAddedSong = lastAddedStack.pop();
-            // Add the last added song to the Pop genre playlist
-            musicManager.addPopSong(lastAddedSong);
-            // Update display
-            displayPopTA.append("\n  " + lastAddedSong.getTitle() + " - " + lastAddedSong.getGenre() + "\n");
+
+            musicManager.addPopSong(lastAddedSong, displayPopTA);
         }
 
     }//GEN-LAST:event_addPopBTNActionPerformed
 
     private void viewLikedBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewLikedBTNActionPerformed
         // TODO add your handling code here:                                       
-        // Check if the liked playlist is empty
+// check if the liked playlist is empty
         if (playlist.isEmpty()) {
-            displayLikedTA.setText("Liked playlist is empty.");
-            return; // Exit the method if playlist is empty
+            displayLikedTA.setText("liked playlist is empty.");
+            return; // exit the method if playlist is empty
         }
 
-        // Construct the string representation of the playlist
+// construct the string representation of the playlist
         StringBuilder likedPlaylistDisplay = new StringBuilder();
 
-        // Append the number of songs in the playlist
-        likedPlaylistDisplay.append("Number of Songs: ").append(playlist.size()).append("\n");
+// append the number of songs in the playlist
+        likedPlaylistDisplay.append("number of songs: ").append(playlist.size()).append("\n");
 
-        // Iterate over the playlist and append each song's information to the display string
+// iterate over the playlist and append each song's information to the display string
         for (int i = 0; i < playlist.size(); i++) {
             Song song = playlist.get(i);
-            // Append the position, song name, and genre to the display string
+            // append the position, song name, and genre to the display string
             likedPlaylistDisplay.append(i + 1).append(". ").append(song.getTitle()).append(", ").append(song.getGenre()).append("\n");
         }
 
-        // Display the playlist in the corresponding text area
+// display the playlist in the corresponding text area
         displayLikedTA.setText(likedPlaylistDisplay.toString());
+
     }//GEN-LAST:event_viewLikedBTNActionPerformed
 
     private void rearangeSongBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rearangeSongBTNActionPerformed
@@ -576,6 +577,16 @@ public class MusicManagerGUI extends javax.swing.JFrame {
                 if (song.getTitle().equalsIgnoreCase(songName)) {
                     playlist.remove(i); // Remove the song at index i
                     songRemoved = true;
+
+                    // Check if the song is in the Pop playlist and remove it
+                    if (musicManager.getPopPlaylist().contains(song)) {
+                        musicManager.getPopPlaylist().remove(song);
+                    }
+
+                    // Check if the song is in the Hip-Hop playlist and remove it
+                    if (musicManager.getHipHopPlaylist().contains(song)) {
+                        musicManager.getHipHopPlaylist().remove(song);
+                    }
                     break;
                 }
             }
@@ -660,20 +671,32 @@ public class MusicManagerGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_exitBTNActionPerformed
 
     private void playBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playBTNActionPerformed
-        // Play songs in the liked playlist
+        // play songs in the liked playlist
         if (playlist.isEmpty()) {
             displayLikedTA.setText("Liked playlist is empty.");
             return;
         }
 
-        // Create a Swing Timer to play songs with a one-second delay
         timer = new Timer(1000, e -> {
-            Song song = playlist.get(currentIndex);
-            displayLikedTA.setText((currentIndex + 1) + ". " + song.getTitle() + ", " + song.getGenre());
-            currentIndex = (currentIndex + 1) % playlist.size(); // Move to the next song
+            // check if there are more songs to play
+            if (currentIndex < playlist.size()) {
+                Song song = playlist.get(currentIndex);
+                displayLikedTA.append((currentIndex + 1) + ". " + song.getTitle() + "\n");
+                currentIndex++;
+            } else {
+                timer.stop();
+                displayLikedTA.append("Repeating in 3 seconds...\n");
+                // Create a new timer to repeat the playlist after 3 seconds
+                Timer repeatTimer = new Timer(3000, repeatEvt -> {
+                    currentIndex = 0; // reset the current index
+                    playLikedPlaylist(); // repeat
+                });
+                repeatTimer.setRepeats(false);
+                repeatTimer.start();
+            }
         });
 
-        // Start the timer
+        currentIndex = 0; // first song
         timer.start();
 
 

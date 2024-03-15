@@ -8,17 +8,16 @@ package musicmanagerapp;
  *
  * @author liamf
  */
-    public interface STCKInterface {
+public interface STCKInterface {
 
     boolean isEmpty();
-    
+
     boolean isFull();
-    
+
     void push(Object newItem);
-    
+
     Object pop();
-    
+
     int size();
 
-    }
-
+}

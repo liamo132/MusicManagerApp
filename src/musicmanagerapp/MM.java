@@ -10,60 +10,54 @@ package musicmanagerapp;
  *
  */
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Stack;
 import javax.swing.JTextArea;
 
 public class MM {
 
-    private Map<String, List<Song>> likedSongsBySubgenre;
+    private List<Song> likedSongs;
+    private List<Song> popSongs;
+    private List<Song> hipHopSongs;
+    private Stack<Song> lastAddedStack;
 
     public MM() {
-        // use HashMap to create 3 different ArrayLists for subgenres 
-        likedSongsBySubgenre = new HashMap<>();
+        //3 arrays to store songs in
+        likedSongs = new ArrayList<>();
+        popSongs = new ArrayList<>();
+        hipHopSongs = new ArrayList<>();
 
-        likedSongsBySubgenre.put("Pop", new ArrayList<>());
-        likedSongsBySubgenre.put("Hip-Hop", new ArrayList<>());
+        lastAddedStack = new Stack<>();
+    }
+    
+    // add a song to my liked playlist
+    public void addLikedSong(Song song, String title, JTextArea displayTA) {
+        likedSongs.add(song);
+        String message = "\n" + "Added song: " + song.getTitle() + ", Genre: " + song.getGenre() ;
+        displayTA.append(message);
     }
 
-    //add song function
-    public void addLikedSong(Song song, String subgenre, JTextArea displayTA) {
-        List<Song> songs = likedSongsBySubgenre.get(subgenre);
-        if (songs != null) {
-            songs.add(song);
-            String message = " \n added a " + subgenre + " song called " + song.getTitle() + " to the liked playlist.\n";
-            displayTA.append(message);
-        } else {
-            System.out.println("Unknown subgenre: " + subgenre);
-        }
+    // add a song from "liked" to my pop playlist
+    public void addPopSong(Song song, JTextArea displayPopTA) {
+        popSongs.add(song);
+        String message = song.getTitle() + " has been added to Pop playlist.\n";
+        displayPopTA.append(message);
     }
-
-    // Method to add a song to the Pop genre playlist
-    public void addPopSong(Song song) {
-        List<Song> popPlaylist = likedSongsBySubgenre.get("Pop");
-        if (popPlaylist != null) {
-            popPlaylist.add(song);
-        } else {
-            System.out.println("Pop playlist not found.");
-        }
+    
+    // add a song from "liked" to my HipHop playlist
+    public void addHipHopSong(Song song, JTextArea displayHipHopTA) {
+        hipHopSongs.add(song);
+        String message = song.getTitle() + " has been added to Hip-Hop playlist.\n";
+        displayHipHopTA.append(message);
     }
-
-    // Method to add a song to the Hip-Hop genre playlist
-    public void addHipHopSong(Song song) {
-        List<Song> hipHopPlaylist = likedSongsBySubgenre.get("Hip-Hop");
-        if (hipHopPlaylist != null) {
-            hipHopPlaylist.add(song);
-        } else {
-            System.out.println("Hip-Hop playlist not found.");
-        }
-    }
-
+    
+    //get methods
     public List<Song> getPopPlaylist() {
-        return likedSongsBySubgenre.get("Pop");
+        return popSongs;
     }
 
     public List<Song> getHipHopPlaylist() {
-        return likedSongsBySubgenre.get("Hip-Hop");
+        return hipHopSongs;
     }
+
 }

@@ -20,4 +20,3 @@ public interface PQInterface {
 
     public String printPQueue();
 }
-
