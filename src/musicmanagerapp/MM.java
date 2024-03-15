@@ -38,9 +38,8 @@ public class MM {
             System.out.println("Unknown subgenre: " + subgenre);
         }
     }
-    
-    
-        // Method to add a song to the Pop genre playlist
+
+    // Method to add a song to the Pop genre playlist
     public void addPopSong(Song song) {
         List<Song> popPlaylist = likedSongsBySubgenre.get("Pop");
         if (popPlaylist != null) {
@@ -49,7 +48,7 @@ public class MM {
             System.out.println("Pop playlist not found.");
         }
     }
-    
+
     // Method to add a song to the Hip-Hop genre playlist
     public void addHipHopSong(Song song) {
         List<Song> hipHopPlaylist = likedSongsBySubgenre.get("Hip-Hop");
@@ -59,7 +58,12 @@ public class MM {
             System.out.println("Hip-Hop playlist not found.");
         }
     }
+
+    public List<Song> getPopPlaylist() {
+        return likedSongsBySubgenre.get("Pop");
+    }
+
+    public List<Song> getHipHopPlaylist() {
+        return likedSongsBySubgenre.get("Hip-Hop");
+    }
 }
-
-
-

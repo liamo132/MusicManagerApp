@@ -427,6 +427,9 @@
               </Border>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="playBTNActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="pauseBTN">
           <Properties>
@@ -440,6 +443,9 @@
               </Border>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="pauseBTNActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="exitBTN">
           <Properties>
