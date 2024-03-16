@@ -469,92 +469,94 @@ public class MusicManagerGUI extends javax.swing.JFrame {
 
     private void viewLikedBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewLikedBTNActionPerformed
         // TODO add your handling code here:                                       
-// check if the liked playlist is empty
+        // check if the liked playlist is empty
         if (playlist.isEmpty()) {
             displayLikedTA.setText("liked playlist is empty.");
             return; // exit the method if playlist is empty
         }
 
-// construct the string representation of the playlist
+        // construct the string representation of the playlist
         StringBuilder likedPlaylistDisplay = new StringBuilder();
 
-// append the number of songs in the playlist
+        // append the number of songs in the playlist
         likedPlaylistDisplay.append("number of songs: ").append(playlist.size()).append("\n");
 
-// iterate over the playlist and append each song's information to the display string
+        // iterate over the playlist and append each song's information to the display string
         for (int i = 0; i < playlist.size(); i++) {
             Song song = playlist.get(i);
             // append the position, song name, and genre to the display string
             likedPlaylistDisplay.append(i + 1).append(". ").append(song.getTitle()).append(", ").append(song.getGenre()).append("\n");
         }
 
-// display the playlist in the corresponding text area
+        // display the playlist in the corresponding text area
         displayLikedTA.setText(likedPlaylistDisplay.toString());
 
     }//GEN-LAST:event_viewLikedBTNActionPerformed
 
     private void rearangeSongBTNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rearangeSongBTNActionPerformed
 
-        //check if the size of the liked songs is zero
-        if (playlist.isEmpty()) {
-            displayLikedTA.setText("No songs to rearrange."); //message if there are no songs to rearrange
-            return; // Exit the method
+           // Check if the size of the liked songs is zero
+    if (playlist.isEmpty()) {
+        displayLikedTA.setText("No songs to rearrange."); // Message if there are no songs to rearrange
+        return; // Exit the method
+    }
+
+    // Create a priority queue to rearrange
+    PriorityQueueImpl priorityQueue = new PriorityQueueImpl();
+
+    // Enqueue songs with their titles and genres
+    for (int i = 0; i < playlist.size(); i++) {
+        priorityQueue.enqueue(i, playlist.get(i));
+    }
+
+    // Dequeue and display songs in the desired order
+    StringBuilder rearrangedSongs = new StringBuilder();
+    while (!priorityQueue.isEmpty()) {
+        Song song = priorityQueue.dequeue();
+        rearrangedSongs.append("  ").append(song.getTitle()).append(" - ").append(song.getGenre()).append("\n");
+    }
+
+    displayLikedTA.setText(rearrangedSongs.toString());
+
+    // Prompt user input (song name to swap with position)
+    String songName = JOptionPane.showInputDialog(this, "Enter the name of the song you want to move:");
+    if (songName != null && !songName.isEmpty()) {
+        // Find the index of the song in the liked playlist
+        int index = -1;
+        for (int i = 0; i < playlist.size(); i++) {
+            if (playlist.get(i).getTitle().equalsIgnoreCase(songName)) {
+                index = i;
+                break;
+            }
+        }
+        if (index == -1) {
+            JOptionPane.showMessageDialog(this, "Song not found.");
+            return;
         }
 
-        //create a priority queue to rearrange
-        PriorityQueue<Song> priorityQueue = new PriorityQueue<>(Comparator.comparing(Song::getTitle));
-
-        // enqueue songs with their titles and genres
-        priorityQueue.addAll(playlist);
-
-        // Dequeue and display songs in the desired order
-        StringBuilder rearrangedSongs = new StringBuilder();
-        while (!priorityQueue.isEmpty()) {
-            Song song = priorityQueue.poll();
-            rearrangedSongs.append("  " + song.getTitle()).append(" - ").append(song.getGenre()).append("\n");
-        }
-
-        displayLikedTA.setText(rearrangedSongs.toString());
-
-        // joption for user input (song name to swap with position)
-        String songName = JOptionPane.showInputDialog(this, "Enter the name of the song you want to move:");
-        if (songName != null && !songName.isEmpty()) {
-            // find the index of the song in the liked playlist
-            int index = -1;
-            for (int i = 0; i < playlist.size(); i++) {
-                if (playlist.get(i).getTitle().equalsIgnoreCase(songName)) {
-                    index = i;
-                    break;
+        String positionStr = JOptionPane.showInputDialog(this, "Enter the new Song position :");
+        if (positionStr != null && !positionStr.isEmpty()) {
+            try {
+                int position = Integer.parseInt(positionStr) - 1; // - 1 to convert to 0 index
+                if (position < 0 || position >= playlist.size()) {
+                    JOptionPane.showMessageDialog(this, "Invalid position.");
+                    return;
                 }
-            }
-            if (index == -1) {
-                JOptionPane.showMessageDialog(this, "Song not found.");
-                return;
-            }
+                // Move the song to the new spot
+                Song movedSong = playlist.remove(index);
+                playlist.add(position, movedSong);
 
-            String positionStr = JOptionPane.showInputDialog(this, "Enter the new Song position :");
-            if (positionStr != null && !positionStr.isEmpty()) {
-                try {
-                    int position = Integer.parseInt(positionStr) - 1; // - 1 to convert to 0 index
-                    if (position < 0 || position >= playlist.size()) {
-                        JOptionPane.showMessageDialog(this, "Invalid position.");
-                        return;
-                    }
-                    // move the song to the new spot
-                    Song movedSong = playlist.remove(index);
-                    playlist.add(position, movedSong);
-
-                    // update display
-                    rearrangedSongs.setLength(0);
-                    for (Song song : playlist) {
-                        rearrangedSongs.append(song.getTitle()).append(" - ").append(song.getGenre()).append("\n");
-                    }
-                    displayLikedTA.setText(rearrangedSongs.toString());
-                } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(this, "Invalid position. Please enter a valid number.");
+                // Update display
+                rearrangedSongs.setLength(0);
+                for (Song song : playlist) {
+                    rearrangedSongs.append(song.getTitle()).append(" - ").append(song.getGenre()).append("\n");
                 }
+                displayLikedTA.setText(rearrangedSongs.toString());
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Invalid position. Please enter a valid number.");
             }
         }
+    }
 
     }//GEN-LAST:event_rearangeSongBTNActionPerformed
 

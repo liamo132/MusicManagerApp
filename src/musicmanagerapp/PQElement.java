@@ -8,8 +8,10 @@ package musicmanagerapp;
  *
  * @author liamf
  */
-public class PQElement {
-    //with my Primary Queue element i can use my "rearange" button in my gui to change a songs position in the array
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
+public class PQElement implements Comparable<PQElement> {
     private int key;
     private Song song;
 
@@ -22,19 +24,15 @@ public class PQElement {
         return key;
     }
 
-    public void setKey(int key) {
-        this.key = key;
-    }
-
     public Song getSong() {
         return song;
     }
 
-    public void setSong(Song song) {
-        this.song = song;
-    }
-
-    public String printSong() {
-        return " Title: " + song.getTitle() + ", Genre: " + song.getGenre();
+    @Override
+    public int compareTo(PQElement other) {
+        return Integer.compare(this.key, other.key);
     }
 }
+
+   
+
